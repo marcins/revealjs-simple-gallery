@@ -8,13 +8,13 @@
 				loops = 0;
 
 			return function () {
-				if (loops === iterations) {
+				if (iterations > 0 && loops === iterations) {
 					return;
 				}
 				items[ptr].className = "inactive";
 				if (ptr === length - 1) {
 					loops++;
-					if (loops < iterations) {
+					if (iterations === 0 || loops < iterations) {
 						ptr = 0;
 					}
 				} else {
@@ -27,7 +27,6 @@
 		var startupGallery = function (slide) {
 			var galleryNode = slide.querySelector('.gallery');
 			if (!galleryNode) return; // early exit if no gallery
-			console.log("Startup gallery with node", galleryNode);
 
 			var items = Array.prototype.slice.apply(galleryNode.querySelectorAll("li"));
 			items.forEach(function (item, index) {
@@ -45,14 +44,14 @@
 				}
 			});
 
-			galleryTimer = setInterval(galleryStep(items, 1), (galleryNode.dataset.interval || 1) * 1000);
+			var iterations = galleryNode.dataset.iterations ? +galleryNode.dataset.iterations : 1;
+			console.log("Iterations is", iterations);
+			var interval = (galleryNode.dataset.interval || 1) * 1000;
+			galleryTimer = setInterval(galleryStep(items, iterations), interval);
 		};
 
 		Reveal.addEventListener("slidechanged", function (event) {
-			var galleryNode = event.previousSlide.querySelector('.gallery');
-
-			if (galleryNode) {
-				console.log("Gallery on last slide, cleaning up");
+			if (event.previousSlide.querySelector('.gallery')) {
 				// cleanup
 				clearInterval(galleryTimer);
 			}
