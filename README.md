@@ -2,6 +2,12 @@
 
 I wanted to show a small gallery inside a reveal.js presentation (slideshow within a slideshow - Inception!).  This is a simple plugin that takes a list of images and converts it to an auto-advancing slideshow.
 
+## Why?
+
+Why not?
+
+Seriously though, could just do a sequence of regular slides with an auto-advance to get the same effect, so why not? Well first of all I didn't think of it until it was too late, and secondly this keeps the slide deck a bit neater. You can easily skip past the whole slideshow by using the keyboard controls, whereas with auto-advance you'd need to jump through all the slides.
+
 ## Installing
 
  * copy `gallery.plugin.js` to `plugins/gallery/gallery.plugin.js` in your reveal.js presentation
