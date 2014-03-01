@@ -5,12 +5,19 @@
 				Gallery.stop();
 			}
 
-			Gallery.start(event.currentSlide);
+			var galleryNode = event.currentSlide.querySelector('.gallery');
+			if (galleryNode) {				
+				Gallery.start(galleryNode);
+			}
+
 		});
 
 		// during initial load
 		if (Reveal.getCurrentSlide()) {
-			Gallery.start(Reveal.getCurrentSlide());
+			var galleryNode = Reveal.getCurrentSlide().querySelector('.gallery');
+			if (galleryNode) {
+				Gallery.start(galleryNode);
+			}
 		}
 	}
 })();
