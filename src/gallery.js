@@ -23,14 +23,13 @@
 		};
 	};
 
-	Gallery.start = function (elem) {
-		var galleryNode = elem.querySelector('.gallery');
-		if (!galleryNode) return; // early exit if no gallery
-
-
+	Gallery.start = function (galleryNode) {
 		galleryMode = galleryNode.dataset.mode || 'normal';
 
 		if (galleryMode === 'full-screen') {
+			// FIXME remove depenency on Reveal, have a callback? function
+			// that will get a root node to move full screen slides to (ie. slidesNode)
+
 			// for full screen mode we need to: 
 			// - take the gallery out of the flow and insert it before "slides"
 			// - hide slides
@@ -41,7 +40,9 @@
 			galleryNode.parentNode.replaceChild(placeholder, galleryNode);
 
 			var slidesNode = document.querySelector(".slides");
-			slidesNode.parentNode.insertBefore(galleryNode, slidesNode);
+			if (slidesNode) {
+				slidesNode.parentNode.insertBefore(galleryNode, slidesNode);
+			}
 		}
 
 		var items = Array.prototype.slice.apply(galleryNode.querySelectorAll("li"));
@@ -73,6 +74,7 @@
 		galleryTimer = setInterval(Gallery.step(items, iterations), interval);
 	};
 
+	// FIXME Gallery.stop should take elem and root nodes as well
 	Gallery.stop = function () {
 		clearInterval(galleryTimer);
 
