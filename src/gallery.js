@@ -23,7 +23,8 @@
 		};
 	};
 
-	Gallery.start = function (galleryNode) {
+	Gallery.start = function (galleryNode, contextNode) {
+		contextNode = contextNode || document.body.firstChild;
 		galleryMode = galleryNode.dataset.mode || 'normal';
 
 		if (galleryMode === 'full-screen') {
@@ -39,9 +40,8 @@
 			placeholder.id = "gallery-placeholder";
 			galleryNode.parentNode.replaceChild(placeholder, galleryNode);
 
-			var slidesNode = document.querySelector(".slides");
-			if (slidesNode) {
-				slidesNode.parentNode.insertBefore(galleryNode, slidesNode);
+			if (contextNode.parentNode) {
+				contextNode.parentNode.insertBefore(galleryNode, contextNode);
 			}
 		}
 
@@ -75,13 +75,11 @@
 	};
 
 	// FIXME Gallery.stop should take elem and root nodes as well
-	Gallery.stop = function () {
+	Gallery.stop = function (galleryNode, contextNode) {
 		clearInterval(galleryTimer);
 
 		if (galleryMode === "full-screen") {
 			// - put the gallery back where it was
-			var slidesNode = document.querySelector('.slides');
-			var galleryNode = slidesNode.previousSibling;
 			var placeholder = document.getElementById("gallery-placeholder");
 			placeholder.parentNode.replaceChild(galleryNode, placeholder);
 
