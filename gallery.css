@@ -21,6 +21,8 @@
 	height: 700px;
 	opacity: 0;
 	-webkit-transition: opacity 0.3s ease-in-out;
+	-moz-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 }
 
 .gallery[data-mode=full-screen] li {
