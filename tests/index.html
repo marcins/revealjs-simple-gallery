@@ -1,0 +1,21 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script src="chai.js"></script>
+  <script src="mocha.js"></script>
+  <script src="sinon-1.8.2.js"></script>
+  <script type="text/javascript">mocha.setup('bdd');</script>
+  <script src="../src/gallery.js"></script>
+  <script src="test.gallery.js"></script>
+  <script>
+    mocha.checkLeaks();
+    //mocha.globals(['jQuery']);
+    mocha.run();
+  </script>
+</body>
+</html>
