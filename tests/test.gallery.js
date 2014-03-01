@@ -15,6 +15,7 @@ describe('Gallery', function () {
 				return this.hasLabel;
 			} else if (selector === "img") {
 				return {
+					style: {},
 					attributes: this.attributes
 				};
 			}
