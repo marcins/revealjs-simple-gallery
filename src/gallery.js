@@ -1,5 +1,5 @@
 (function(Gallery) {
-	var galleryTimer;
+	var galleryTimer, galleryMode;
 
 	Gallery.step = function (items, iterations) {
 		var length = items.length,
@@ -27,6 +27,23 @@
 		var galleryNode = elem.querySelector('.gallery');
 		if (!galleryNode) return; // early exit if no gallery
 
+
+		galleryMode = galleryNode.dataset.mode || 'normal';
+
+		if (galleryMode === 'full-screen') {
+			// for full screen mode we need to: 
+			// - take the gallery out of the flow and insert it before "slides"
+			// - hide slides
+			// - make it full screen
+
+			var placeholder = document.createElement("div");
+			placeholder.id = "gallery-placeholder";
+			galleryNode.parentNode.replaceChild(placeholder, galleryNode);
+
+			var slidesNode = document.querySelector(".slides");
+			slidesNode.parentNode.insertBefore(galleryNode, slidesNode);
+		}
+
 		var items = Array.prototype.slice.apply(galleryNode.querySelectorAll("li"));
 		items.forEach(function (item, index) {
 			if (index === 0) {
@@ -36,6 +53,14 @@
 			}
 			var label = item.querySelector("label");
 			var img = item.querySelector("img");
+
+			if (galleryMode === 'full-screen') {
+				img.style.display = "none";
+				item.style.backgroundImage = "url(" + img.src + ")";
+			} else {
+				img.style.display = "";
+			}
+
 			if (!label && img.attributes.alt) {
 				label = document.createElement("label");
 				label.innerHTML = img.attributes.alt.value;
@@ -50,5 +75,20 @@
 
 	Gallery.stop = function () {
 		clearInterval(galleryTimer);
+
+		if (galleryMode === "full-screen") {
+			// - put the gallery back where it was
+			var slidesNode = document.querySelector('.slides');
+			var galleryNode = slidesNode.previousSibling;
+			var placeholder = document.getElementById("gallery-placeholder");
+			placeholder.parentNode.replaceChild(galleryNode, placeholder);
+
+			var items = Array.prototype.slice.apply(galleryNode.querySelectorAll("li"));
+			items.forEach(function (item, index) {
+				var img = item.querySelector("img");
+				item.style.backgroundImage = "";
+				img.style.display = "";
+			});
+		}
 	};
 })(window.Gallery = window.Gallery || {});

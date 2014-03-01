@@ -1,7 +1,7 @@
 (function() {
 	if( typeof window.addEventListener === 'function' ) {
 		Reveal.addEventListener("slidechanged", function (event) {
-			if (event.previousSlide.querySelector('.gallery')) {
+			if (event.previousSlide.querySelector('.gallery') || document.querySelector('.reveal > .gallery')) {
 				Gallery.stop();
 			}
 
