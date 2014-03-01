@@ -3,9 +3,25 @@
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="mocha.css" />
+  <style type="text/css">
+  .container {
+    display: none;
+  }
+  .gallery {
+    display: none;
+  }
+  </style>
 </head>
 <body>
   <div id="mocha"></div>
+  <div class="container">
+    <section class="slide">
+      <ul class="gallery">
+        <li><img src="item1.jpg" alt="ALT1"><label>Foo</label></li>
+        <li><img src="item2.jpg" alt="ALT2"></li>
+      </ul>
+    </section>
+  </div>
   <script src="chai.js"></script>
   <script src="mocha.js"></script>
   <script src="sinon-1.8.2.js"></script>

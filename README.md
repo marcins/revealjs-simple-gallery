@@ -26,13 +26,22 @@ The gallery plugin will take the alt tags in your images and convert them to `la
 
 ## Configuring
 
-There's only really two configurable options at the moment, both set as data elements on the `<ul>`:
+Configuration options are set as data elements on the `<ul>`:
 
 * **data-interval** a Number which determines how long each slide is shown for (in seconds) - default is 1.0
 * **data-iterations** how many times to loop through the slideshow - default is once and stop on the last slide. Set
  to 0 to repeat indefinitely
+* **data-mode** supported values are "normal" and "full-screen", with normal being default if the attribute isn't present
 
 You can also customise how the labels will look by editing the `label` style in `gallery.css`.
+
+### Full Screen Mode
+
+This is a bit of a hack, basically when the gallery's mode is "full-screen" and you enter a slide with the gallery it is taken out of the slide flow and inserted into the DOM before the slides element. The images are hidden and their sources are applied as backgrounds on the `li` instead, to allow them to be center cropped via CSS. Animation continues as normal, which wouldn't have been possible with a slide background.
+
+When you exit the slide with a gallery the element is returned back into the slide where it was - order is restored!
+
+Your mileage may vary with the behaviour of any of the keyboard commands except going back and forth between slides when in full screen mode, as reveal.js now has an unexpected element in an unexpected place.
 
 ## Contributing
 

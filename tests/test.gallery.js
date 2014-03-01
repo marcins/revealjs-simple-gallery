@@ -3,54 +3,64 @@
 describe('Gallery', function () {
 	var expect = chai.expect;
 
-	describe('#start', function () {
-		var itemElem1, itemElem2, items, galleryElem;
-		var MockItem = function (hasLabel, attributes) {
-			this.hasLabel = hasLabel;
-			this.attributes = attributes;
-			return this;
+	var contextNode = document.querySelector(".container");
+
+	var itemElem1, itemElem2, items, galleryElem;
+	var MockItem = function (hasLabel, attributes) {
+		this.hasLabel = hasLabel;
+		this.attributes = attributes;
+		this.style = {};
+		this.img = {
+			style: {},
+			attributes: this.attributes,
+			src: "SRC"
 		};
-		MockItem.prototype.querySelector = function (selector) {
-			if (selector === "label") {
-				return this.hasLabel;
-			} else if (selector === "img") {
-				return {
-					attributes: this.attributes
-				};
+		return this;
+	};
+	MockItem.prototype.querySelector = function (selector) {
+		if (selector === "label") {
+			return this.hasLabel;
+		} else if (selector === "img") {
+			return this.img;
+		}
+	};
+	MockItem.prototype.appendChild = function () {};
+	var intervalStub, stepSpy;
+
+	beforeEach(function () {
+		/* Mock Item elements */
+		itemElem1 = new MockItem(true, {});
+		itemElem2 = new MockItem(false, {alt: { value: "ALT"}});
+		items = [itemElem1, itemElem2];
+		/* Mock DOM Gallery element */
+		galleryElem = {
+			dataset: {},
+			// return SOMETHING!
+			querySelector: function (selector) {
+				return this;
+			},
+			querySelectorAll: function (selector) {
+				return items;
+			},
+			parentNode: {
+				replaceChild: function () {}
 			}
 		};
-		MockItem.prototype.appendChild = function () {};
-		var intervalStub, stepSpy;
-		
-		beforeEach(function () {
-			/* Mock Item elements */
-			itemElem1 = new MockItem(true, {});			
-			itemElem2 = new MockItem(false, {alt: { value: "ALT"}});
-			items = [itemElem1, itemElem2];
-			/* Mock DOM Gallery element */
-			galleryElem = {
-				dataset: {},
-				// return SOMETHING!
-				querySelector: function (selector) {
-					return this;
-				},
-				querySelectorAll: function (selector) {
-					return items;
-				}
-			};
-			intervalStub = sinon.stub(window, "setInterval");
-			stepSpy = sinon.spy(Gallery, "step");
-		});
+		intervalStub = sinon.stub(window, "setInterval");
+		stepSpy = sinon.spy(Gallery, "step");
+	});
+	afterEach(function () {
+		intervalStub.restore();
+		stepSpy.restore();
+	});
 
-		afterEach(function () {
-			intervalStub.restore();
-			stepSpy.restore();
-		});
-
+	describe('#start', function () {
 		it("initialises the gallery with defaults", function () {
 			Gallery.start(galleryElem);
 			expect(stepSpy.calledWith(items, 1)).to.be.true;
 			expect(intervalStub.calledWith(sinon.match.any, 1000)).to.be.true;
+			expect(itemElem1.style.backgroundImage).to.be.undefined;
+			expect(itemElem1.img.style.display).to.equal("");
 		});
 
 		it("initialises the gallery with custom iterations", function () {
@@ -80,6 +90,27 @@ describe('Gallery', function () {
 			Gallery.start(galleryElem);
 			expect(appendChildSpy2.called).to.be.false;
 			appendChildSpy2.restore();
+		});
+		it("handles a full screen gallery", function () {
+			var galleryElem = document.querySelector(".gallery");
+			var items = galleryElem.querySelectorAll('li');
+			galleryElem.dataset.mode = "full-screen";
+			Gallery.start(galleryElem, contextNode);
+			expect(items[0].querySelector('img').style.display).to.equal("none");
+			expect(items[1].querySelector('img').style.display).to.equal("none");
+			expect(items[0].style.backgroundImage).to.contain("item1.jpg");
+		});
+	});
+	describe('#stop', function () {
+		it("restores a full screen gallery", function () {
+			var galleryElem = document.querySelector(".gallery");
+			var items = galleryElem.querySelectorAll('li');
+			galleryElem.dataset.mode = "full-screen";
+			Gallery.start(galleryElem, contextNode);
+			Gallery.stop(galleryElem, contextNode);
+			expect(items[0].querySelector('img').style.display).to.equal("");
+			expect(items[1].querySelector('img').style.display).to.equal("");
+			expect(items[0].style.backgroundImage).to.equal("");
 		});
 	});
 	describe('#step', function () {
