@@ -4,13 +4,13 @@ I wanted to show a small gallery inside a reveal.js presentation (slideshow with
 
 ## Installing
 
- * copy `gallery.js` to `plugins/gallery/gallery.js` in your reveal.js presentation
+ * copy `gallery.plugin.js` to `plugins/gallery/gallery.plugin.js` in your reveal.js presentation
  * copy `gallery.css` to `plugins/gallery/gallery.css` or integrate into your CSS your preferred way, customise the styles as required. You will need to set the width and height of the `.gallery` selector to match the natural size of your presentation defined in `reveal.js`
  * add the following to the head of `index.html` after other stylesheets are loaded:
  ```<link rel="stylesheet" href="plugins/gallery/gallery.css">```
  * add the following to the bottom of `index.html`, where the other plugins are defined:
 ```js
-{ src: 'plugin/gallery/gallery.js', async: true, condition: function() { return !!document.querySelector('.gallery'); } }
+{ src: 'plugin/gallery/gallery.plugin.js', async: true, condition: function() { return !!document.querySelector('.gallery'); } }
 ```
  * add a gallery somewhere in your slide:
 
@@ -33,3 +33,13 @@ There's only really two configurable options at the moment, both set as data ele
  to 0 to repeat indefinitely
 
 You can also customise how the labels will look by editing the `label` style in `gallery.css`.
+
+## Contributing
+
+### Building
+
+Just for kicks this codebase is a bit overengineered. The Reveal specific code has been split from the generic Gallery code to allow it to be tested.  Gallery code is in `src/gallery.js`, Reveal plugin code is in `src/gallery.reveal.js`. To build a single JS file for use with Reveal there is a `Makefile` - so just run `make` in the root of the project and you'll get a `gallery.plugin.js`.
+
+### Testing
+
+Tests are browser based using Mocha & Chai, run these by running `tests/index.html`.
