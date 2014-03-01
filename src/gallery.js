@@ -35,8 +35,8 @@
 				item.className = "inactive";
 			}
 			var label = item.querySelector("label");
-			if (!label) {
-				var img = item.querySelector("img");
+			var img = item.querySelector("img");
+			if (!label && img.attributes.alt) {
 				label = document.createElement("label");
 				label.innerHTML = img.attributes.alt.value;
 				item.appendChild(label);

@@ -5,8 +5,9 @@ describe('Gallery', function () {
 
 	describe('#start', function () {
 		var itemElem1, itemElem2, items, galleryElem;
-		var MockItem = function (hasLabel) {
+		var MockItem = function (hasLabel, attributes) {
 			this.hasLabel = hasLabel;
+			this.attributes = attributes;
 			return this;
 		};
 		MockItem.prototype.querySelector = function (selector) {
@@ -14,11 +15,7 @@ describe('Gallery', function () {
 				return this.hasLabel;
 			} else if (selector === "img") {
 				return {
-					attributes: {
-						alt: {
-							value: "ALT"
-						}
-					}
+					attributes: this.attributes
 				};
 			}
 		};
@@ -27,8 +24,8 @@ describe('Gallery', function () {
 		
 		beforeEach(function () {
 			/* Mock Item elements */
-			itemElem1 = new MockItem(true);			
-			itemElem2 = new MockItem(false);
+			itemElem1 = new MockItem(true, {});			
+			itemElem2 = new MockItem(false, {alt: { value: "ALT"}});
 			items = [itemElem1, itemElem2];
 			/* Mock DOM Gallery element */
 			galleryElem = {
@@ -75,6 +72,13 @@ describe('Gallery', function () {
 			var elem = appendChildSpy2.args[0][0];
 			expect(elem.innerHTML).to.equal('ALT');
 			appendChildSpy1.restore();
+			appendChildSpy2.restore();
+		});
+		it("doesn't fail if items doesn't have an alt attribute", function () {
+			delete itemElem2.attributes.alt;
+			var appendChildSpy2 = sinon.spy(itemElem2, "appendChild");
+			Gallery.start(galleryElem);
+			expect(appendChildSpy2.called).to.be.false;
 			appendChildSpy2.restore();
 		});
 	});
