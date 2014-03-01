@@ -3,6 +3,8 @@
 describe('Gallery', function () {
 	var expect = chai.expect;
 
+	var contextNode = document.querySelector(".container");
+
 	var itemElem1, itemElem2, items, galleryElem;
 	var MockItem = function (hasLabel, attributes) {
 		this.hasLabel = hasLabel;
@@ -90,21 +92,25 @@ describe('Gallery', function () {
 			appendChildSpy2.restore();
 		});
 		it("handles a full screen gallery", function () {
+			var galleryElem = document.querySelector(".gallery");
+			var items = galleryElem.querySelectorAll('li');
 			galleryElem.dataset.mode = "full-screen";
-			Gallery.start(galleryElem);
-			expect(itemElem1.img.style.display).to.equal("none");
-			expect(itemElem2.img.style.display).to.equal("none");
-			expect(itemElem1.style.backgroundImage).to.equal("url(SRC)");
+			Gallery.start(galleryElem, contextNode);
+			expect(items[0].querySelector('img').style.display).to.equal("none");
+			expect(items[1].querySelector('img').style.display).to.equal("none");
+			expect(items[0].style.backgroundImage).to.contain("item1.jpg");
 		});
 	});
 	describe('#stop', function () {
 		it("restores a full screen gallery", function () {
+			var galleryElem = document.querySelector(".gallery");
+			var items = galleryElem.querySelectorAll('li');
 			galleryElem.dataset.mode = "full-screen";
-			Gallery.start(galleryElem);
-			Gallery.stop();
-			expect(itemElem1.img.style.display).to.equal("");
-			expect(itemElem2.img.style.display).to.equal("");
-			expect(itemElem1.style.backgroundImage).to.equal("");
+			Gallery.start(galleryElem, contextNode);
+			Gallery.stop(galleryElem, contextNode);
+			expect(items[0].querySelector('img').style.display).to.equal("");
+			expect(items[1].querySelector('img').style.display).to.equal("");
+			expect(items[0].style.backgroundImage).to.equal("");
 		});
 	});
 	describe('#step', function () {
