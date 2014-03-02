@@ -2,6 +2,8 @@
 
 I wanted to show a small gallery inside a reveal.js presentation (slideshow within a slideshow - Inception!).  This is a simple plugin that takes a list of images and converts it to an auto-advancing slideshow.
 
+Check out an [example of the different variations](http://junkheap.net/examples/revealjs-gallery/)
+
 ## Why?
 
 Why not?
@@ -10,10 +12,10 @@ Seriously though, could just do a sequence of regular slides with an auto-advanc
 
 ## Installing
 
- * copy `gallery.plugin.js` to `plugins/gallery/gallery.plugin.js` in your reveal.js presentation
- * copy `gallery.css` to `plugins/gallery/gallery.css` or integrate into your CSS your preferred way, customise the styles as required. You will need to set the width and height of the `.gallery` selector to match the natural size of your presentation defined in `reveal.js`
+ * copy `gallery.plugin.js` to `plugin/gallery/gallery.plugin.js` in your reveal.js presentation
+ * copy `gallery.css` to `plugin/gallery/gallery.css` or integrate into your CSS your preferred way, customise the styles as required. You will need to set the width and height of the `.gallery` selector to match the natural size of your presentation defined in `reveal.js`
  * add the following to the head of `index.html` after other stylesheets are loaded:
- ```<link rel="stylesheet" href="plugins/gallery/gallery.css">```
+ ```<link rel="stylesheet" href="plugin/gallery/gallery.css">```
  * add the following to the bottom of `index.html`, where the other plugins are defined:
 ```js
 { src: 'plugin/gallery/gallery.plugin.js', async: true, condition: function() { return !!document.querySelector('.gallery'); } }
